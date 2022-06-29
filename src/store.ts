@@ -27,6 +27,7 @@ export interface Tweet {
   username: string;
   segments: { text: string; type: "text" | "link" }[];
   retweets: number;
+  time: string;
   __event: any;
 }
 
@@ -190,6 +191,9 @@ function processTweet(event: TweetEvent) {
     name: user.name,
     username: user.username,
     segments,
+    time: new Date(Date.parse(tweet.created_at) + 7 * 3600e3)
+      .toISOString()
+      .slice(11, 19),
     __event: event,
     retweets: tweet.public_metrics.retweet_count,
   };

@@ -16,7 +16,11 @@
         <img src={tweet.avatar} alt="" class="w-8 h-8 rounded-full flex-none" />
         <div class="text-sm flex-1 mx-2 leading-tight">
           <strong>{tweet.name}</strong>
-          <div class="opacity-60">@{tweet.username}</div>
+          <div class="opacity-60">
+            @{tweet.username}<span class="text-xs"
+              >{" "}&middot; {tweet.time}</span
+            >
+          </div>
         </div>
         <div class="flex-none self-start opacity-40">
           <a href={tweet.href}>
