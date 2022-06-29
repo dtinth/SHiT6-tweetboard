@@ -1,5 +1,6 @@
 import { writable } from "svelte/store";
 import { io } from "socket.io-client";
+import { queryParams } from "./queryParams";
 
 class Throttler {
   private nextTime = 0;
@@ -15,10 +16,11 @@ class Throttler {
   }
 }
 
-const throttler = new Throttler(200);
+const throttler = new Throttler(+queryParams.get("throttle") || 0);
 
 export interface Tweet {
   id: string;
+  href: string;
   text: string;
   avatar: string;
   name: string;
@@ -72,6 +74,11 @@ interface TwitterTweet {
       end: number;
       username: string;
       id: string;
+    }[];
+    hashtags?: {
+      start: number;
+      end: number;
+      tag: string;
     }[];
     urls?: {
       start: number;
@@ -139,6 +146,13 @@ function processTweet(event: TweetEvent) {
       text: `@${mention.username}`,
     });
   }
+  for (const mention of tweet.entities.hashtags || []) {
+    links.push({
+      start: mention.start,
+      end: mention.end,
+      text: `#${mention.tag}`,
+    });
+  }
   for (const link of tweet.entities.urls || []) {
     links.push({
       start: link.start,
@@ -148,10 +162,11 @@ function processTweet(event: TweetEvent) {
   }
   links.sort((a, b) => a.start - b.start);
   let lastEnd = 0;
+  const text = [...tweet.text];
   for (const link of links) {
     if (link.start > lastEnd) {
       segments.push({
-        text: tweet.text.slice(lastEnd, link.start),
+        text: text.slice(lastEnd, link.start).join(""),
         type: "text",
       });
     }
@@ -161,14 +176,15 @@ function processTweet(event: TweetEvent) {
     });
     lastEnd = link.end;
   }
-  if (lastEnd < tweet.text.length) {
+  if (lastEnd < text.length) {
     segments.push({
-      text: tweet.text.slice(lastEnd),
+      text: text.slice(lastEnd).join(""),
       type: "text",
     });
   }
   const newTweet: Tweet = {
     id: tweet.id,
+    href: `https://twitter.com/${user.username}/status/${tweet.id}`,
     text: tweet.text,
     avatar: user.profile_image_url,
     name: user.name,
