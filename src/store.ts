@@ -120,12 +120,6 @@ interface TweetEvent {
 }
 
 function processTweet(event: TweetEvent) {
-  const user = event.includes.users.find(
-    (user) => user.id === event.data.author_id
-  );
-  if (!user) {
-    return;
-  }
   const segments: Tweet["segments"] = [];
   const links: { start: number; end: number; text: string }[] = [];
   let tweet = event.data;
@@ -139,6 +133,10 @@ function processTweet(event: TweetEvent) {
     if (retweetedTweet) {
       tweet = retweetedTweet;
     }
+  }
+  const user = event.includes.users.find((user) => user.id === tweet.author_id);
+  if (!user) {
+    return;
   }
   for (const mention of tweet.entities.mentions || []) {
     links.push({
