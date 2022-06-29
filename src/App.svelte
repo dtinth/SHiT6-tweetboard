@@ -1,65 +1,43 @@
 <script lang="ts">
-  import logo from './assets/svelte.png'
-  import Counter from './lib/Counter.svelte'
+  import { tweets } from "./store";
+  import { flip } from "svelte/animate";
+  import { fade, fly } from "svelte/transition";
 </script>
 
-<main>
-  <img src={logo} alt="Svelte Logo" />
-  <h1>Hello Typescript!</h1>
-
-  <Counter />
-
-  <p>
-    Visit <a href="https://svelte.dev">svelte.dev</a> to learn how to build Svelte
-    apps.
-  </p>
-
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme">SvelteKit</a> for
-    the officially supported framework, also powered by Vite!
-  </p>
+<main class="p-8 max-w-xl">
+  {#each $tweets.slice(0, 16) as tweet (tweet.id)}
+    <div
+      in:fly={{ x: 100, duration: 256 }}
+      animate:flip={{ duration: 256 }}
+      class="mb-4 border border-gray-600 rounded-lg p-4"
+      on:click={() => console.log(tweet)}
+    >
+      <div class="flex items-center">
+        <img src={tweet.avatar} alt="" class="w-8 h-8 rounded-full flex-none" />
+        <div class="text-sm flex-1 mx-2 leading-tight">
+          <strong>{tweet.name}</strong>
+          <div class="opacity-60">@{tweet.username}</div>
+        </div>
+      </div>
+      <p class="text-xl mt-2">
+        {#each tweet.segments as segment}
+          <span class:text-sky-300={segment.type != "text"}>{segment.text}</span
+          >
+        {/each}
+      </p>
+      {#if tweet.retweets > 0}
+        <div class="text-gray-400 mt-2 flex gap-2 items-center">
+          <svg viewBox="0 0 24 24" aria-hidden="true" class="w-4 h-4">
+            <g>
+              <path
+                fill="currentColor"
+                d="M23.77 15.67c-.292-.293-.767-.293-1.06 0l-2.22 2.22V7.65c0-2.068-1.683-3.75-3.75-3.75h-5.85c-.414 0-.75.336-.75.75s.336.75.75.75h5.85c1.24 0 2.25 1.01 2.25 2.25v10.24l-2.22-2.22c-.293-.293-.768-.293-1.06 0s-.294.768 0 1.06l3.5 3.5c.145.147.337.22.53.22s.383-.072.53-.22l3.5-3.5c.294-.292.294-.767 0-1.06zm-10.66 3.28H7.26c-1.24 0-2.25-1.01-2.25-2.25V6.46l2.22 2.22c.148.147.34.22.532.22s.384-.073.53-.22c.293-.293.293-.768 0-1.06l-3.5-3.5c-.293-.294-.768-.294-1.06 0l-3.5 3.5c-.294.292-.294.767 0 1.06s.767.293 1.06 0l2.22-2.22V16.7c0 2.068 1.683 3.75 3.75 3.75h5.85c.414 0 .75-.336.75-.75s-.337-.75-.75-.75z"
+              />
+            </g>
+          </svg>
+          {tweet.retweets}
+        </div>
+      {/if}
+    </div>
+  {/each}
 </main>
-
-<style>
-  :root {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  }
-
-  main {
-    text-align: center;
-    padding: 1em;
-    margin: 0 auto;
-  }
-
-  img {
-    height: 16rem;
-    width: 16rem;
-  }
-
-  h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4rem;
-    font-weight: 100;
-    line-height: 1.1;
-    margin: 2rem auto;
-    max-width: 14rem;
-  }
-
-  p {
-    max-width: 14rem;
-    margin: 1rem auto;
-    line-height: 1.35;
-  }
-
-  @media (min-width: 480px) {
-    h1 {
-      max-width: none;
-    }
-
-    p {
-      max-width: none;
-    }
-  }
-</style>
