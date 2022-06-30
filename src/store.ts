@@ -159,7 +159,9 @@ function processTweet(event: TweetEvent) {
     links.push({
       start: link.start,
       end: link.end,
-      text: link.display_url,
+      text: link.display_url.startsWith("pic.twitter.com/")
+        ? "📸"
+        : link.display_url,
     });
   }
   links.sort((a, b) => a.start - b.start);
