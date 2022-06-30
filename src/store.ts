@@ -120,6 +120,9 @@ interface TweetEvent {
 }
 
 function processTweet(event: TweetEvent) {
+  if (event.data.created_at < "2022-06-29T20:28:00.000Z") {
+    return;
+  }
   const segments: Tweet["segments"] = [];
   const links: { start: number; end: number; text: string }[] = [];
   let tweet = event.data;
