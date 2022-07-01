@@ -32,7 +32,7 @@ export interface Tweet {
 }
 
 export const tweets = writable([] as Tweet[]);
-export const settings = writable({} as Settings);
+export const settings = writable({ options: {} } as Settings);
 interface Settings {
   options: {
     iframe?: string;
