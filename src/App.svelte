@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { tweets } from "./store";
+  import { settings, tweets } from "./store";
   import { flip } from "svelte/animate";
   import { fade, fly } from "svelte/transition";
 </script>
@@ -58,10 +58,13 @@
   {/each}
 </main>
 
-<div class="fixed left-[36rem] inset-y-0 right-0">
-  <iframe
-    src="https://bit.ly/3nwEcx3"
-    title="whiteboard"
-    class="absolute top-0 left-0 w-full h-full"
-  />
-</div>
+{#if $settings.options.whiteboard}
+  <div class="fixed left-[36rem] inset-y-0 right-0">
+    <!-- https://bit.ly/3nwEcx3 -->
+    <iframe
+      src="https://bit.ly/3nwEcx3"
+      title="whiteboard"
+      class="absolute top-0 left-0 w-full h-full"
+    />
+  </div>
+{/if}

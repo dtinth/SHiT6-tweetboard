@@ -4,9 +4,11 @@ const client = axios.create({
   baseURL: "https://tweet-party.glitch.me/",
 });
 
-const response = await client.post("/broadcast", {
+const response = await client.post("/options", {
   adminKey: process.env.ADMIN_KEY,
-  payload: process.argv[2],
+  options: {
+    whiteboard: true,
+  },
 });
 
 console.log(response.data);

@@ -32,17 +32,30 @@ export interface Tweet {
 }
 
 export const tweets = writable([] as Tweet[]);
+export const settings = writable({} as Settings);
+interface Settings {
+  options: {
+    whiteboard?: boolean;
+  };
+}
 
 const socket = io("https://tweet-party.glitch.me/");
 if ((window as any).socket) {
   (window as any).socket?.disconnect();
 }
 Object.assign(window, { socket });
-socket.on("settings", (settings) => {
-  console.log("settings", settings);
+socket.on("settings", (data) => {
+  console.log("settings", data);
+  settings.set(data);
 });
 socket.on("viewers", (viewers) => {
   console.log("viewers", viewers);
+});
+socket.on("broadcast", (broadcast) => {
+  console.log("broadcast", broadcast);
+  if (broadcast === "reload") {
+    location.reload();
+  }
 });
 socket.on("tweet", (event) => {
   if (event.system_message) {
