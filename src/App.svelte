@@ -57,3 +57,11 @@
     </div>
   {/each}
 </main>
+
+<div class="fixed left-[36rem] inset-y-0 right-0">
+  <iframe
+    src="https://bit.ly/3nwEcx3"
+    title="whiteboard"
+    class="absolute top-0 left-0 w-full h-full"
+  />
+</div>
