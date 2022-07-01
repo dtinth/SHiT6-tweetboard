@@ -58,11 +58,10 @@
   {/each}
 </main>
 
-{#if $settings.options.whiteboard}
+{#if $settings.options.iframe}
   <div class="fixed left-[36rem] inset-y-0 right-0">
-    <!-- https://bit.ly/3nwEcx3 -->
     <iframe
-      src="https://bit.ly/3nwEcx3"
+      src={$settings.options.iframe}
       title="whiteboard"
       class="absolute top-0 left-0 w-full h-full"
     />

@@ -35,7 +35,7 @@ export const tweets = writable([] as Tweet[]);
 export const settings = writable({} as Settings);
 interface Settings {
   options: {
-    whiteboard?: boolean;
+    iframe?: string;
   };
 }
 
