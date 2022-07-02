@@ -4,7 +4,7 @@
   import { fade, fly } from "svelte/transition";
 </script>
 
-<main class="p-8 max-w-xl">
+<main class="p-8 max-w-[28rem]">
   {#each $tweets.slice(0, 16) as tweet (tweet.id)}
     <div
       in:fly={{ x: 100, duration: 256 }}
@@ -59,7 +59,7 @@
 </main>
 
 {#if $settings.options.iframe}
-  <div class="fixed left-[36rem] inset-y-0 right-0">
+  <div class="fixed left-[28rem] inset-y-0 right-0">
     <iframe
       src={$settings.options.iframe}
       title="whiteboard"
