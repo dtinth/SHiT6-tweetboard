@@ -25,12 +25,21 @@ export interface Tweet {
   avatar: string;
   name: string;
   username: string;
+  media?: Media;
   segments: { text: string; type: "text" | "link" }[];
   retweets: number;
   time: string;
   __event: any;
 }
 
+interface Media {
+  width: number;
+  height: number;
+  url: string;
+  media_key: string;
+}
+
+export const media = {} as Record<string, Media>;
 export const tweets = writable([] as Tweet[]);
 export const settings = writable({ options: {} } as Settings);
 interface Settings {
@@ -129,12 +138,16 @@ interface TweetEvent {
       username: string;
     }[];
     tweets?: TwitterTweet[];
+    media?: Media[];
   };
 }
 
 function processTweet(event: TweetEvent) {
   if (event.data.created_at < "2022-06-29T20:28:00.000Z") {
     return;
+  }
+  for (const f of event.includes?.media || []) {
+    media[f.media_key] = f;
   }
   const segments: Tweet["segments"] = [];
   const links: { start: number; end: number; text: string }[] = [];
@@ -207,6 +220,7 @@ function processTweet(event: TweetEvent) {
     name: user.name,
     username: user.username,
     segments,
+    media: media[tweet.attachments?.media_keys?.[0]],
     time: new Date(Date.parse(tweet.created_at) + 7 * 3600e3)
       .toISOString()
       .slice(11, 19),
