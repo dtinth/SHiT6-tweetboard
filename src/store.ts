@@ -37,6 +37,7 @@ interface Media {
   height: number;
   url: string;
   media_key: string;
+  preview_image_url?: string;
 }
 
 export const media = {} as Record<string, Media>;

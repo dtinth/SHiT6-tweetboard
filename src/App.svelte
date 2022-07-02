@@ -68,12 +68,12 @@
       {#if tweet.media}
         <div class="relative [aspect-ratio:4/3] overflow-hidden">
           <img
-            src={tweet.media.url}
+            src={tweet.media.preview_image_url || tweet.media.url}
             alt=""
             class="absolute inset-0 w-full h-full object-cover blur-lg opacity-50"
           />
           <img
-            src={tweet.media.url}
+            src={tweet.media.preview_image_url || tweet.media.url}
             alt=""
             class="absolute inset-0 w-full h-full object-contain"
           />
